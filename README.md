@@ -36,12 +36,11 @@ o.save
 1: Importing massive answers for proposals
 ------------------------------------------
 
-Copy the script:
+Copy the script into your `lib/tasks` of your Decidim installation:
 
 ```
-cp proposal_answers.rake ../decidim-barcelona-preprod/lib/tasks
-cp geoloc_import.rake ../decidim-barcelona-preprod/lib/tasks
-cp script_helpers.rake ../decidim-barcelona-preprod/lib/tasks
+cd lib/tasks
+wget -qO- https://github.com/Platoniq/decidim-scripts/archive/0.2.tar.gz | tar --transform 's/^decidim-scripts-0.2//' -xvz
 ```
 
 Run in local (as testing):
@@ -61,9 +60,7 @@ As there's no "copy" command to do that you can use the service https://transfer
 ```
 curl --upload-file pam-ciutat.csv https://transfer.sh/pam-ciutat.csv -H "Max-Days: 1"
 curl --upload-file pam-districtes.csv https://transfer.sh/pam-districte.csv -H "Max-Days: 1"
-curl --upload-file proposal_answers.rake https://transfer.sh/proposal_answers.rake -H "Max-Days: 1"
-curl --upload-file proposal_answers.rake https://transfer.sh/geoloc_import.rake -H "Max-Days: 1"
-curl --upload-file proposal_answers.rake https://transfer.sh/script_helpers.rb -H "Max-Days: 1"
+curl --upload-file geolocs.csv https://transfer.sh/geolocs.csv -H "Max-Days: 1"
 ```
 
 Which will return (for instance) the download addresses:
@@ -71,9 +68,7 @@ Which will return (for instance) the download addresses:
 ```
 https://transfer.sh/23lG7/pam-ciutat.csv
 https://transfer.sh/YwYAN/pam-districte.csv
-https://transfer.sh/x3hUa/proposal_answers.rake
-https://transfer.sh/x4hUa/geoloc_import.rake
-https://transfer.sh/x5hUa/script_helpers.rake
+https://transfer.sh/x3hUa/geolocs.csv
 ```
 
 2. Login into a shell session in heroku
@@ -87,12 +82,16 @@ heroku run bash
 ```
 wget https://transfer.sh/23lG7/pam-ciutat.csv
 wget https://transfer.sh/YwYAN/pam-districte.csv
-wget https://transfer.sh/x3hUa/proposal_answers.rake -O lib/tasks/proposal_answers.rake
-wget https://transfer.sh/x4hUa/geoloc_import.rake -O lib/tasks/proposal_answers.rake
-wget https://transfer.sh/x5hUa/script_helpers.rake -O lib/tasks/proposal_answers.rake
+wget https://transfer.sh/x3hUa/golocs.csv
 ```
 
-4. Run the script inside the shell session (2nd terminal):
+4. Download the scripts into the `lib/tasks` folder:
+
+```
+wget -qO- https://github.com/Platoniq/decidim-scripts/archive/0.2.tar.gz | tar --transform 's/^decidim-scripts-0.2//' -xvz -C lib/tasks
+```
+
+5. Run the script inside the shell session (2nd terminal):
 
 ```
 bin/rails proposals:batch:answer

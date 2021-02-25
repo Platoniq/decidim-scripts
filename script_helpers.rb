@@ -25,7 +25,18 @@ Rest of the lines must containt values for the corresponding headers
 
     table = CSV.parse(File.read(args.csv), headers: true)
 
-    yield(admin, table)
+    table.each_with_index do |line, index|
+      print "##{index} (#{100 * (index + 1) / table.count}%): "
+      begin
+        yield(admin, line)
+      rescue UnprocessableError => e
+        show_error(e.message)
+      rescue ActiveRecord::RecordInvalid => e
+        show_error(e.message)            
+      rescue AlreadyProcessedError => e
+        show_warning(e.message)
+      end
+    end
   rescue ArgumentError => e
     puts
     show_error(e.message)
@@ -65,9 +76,9 @@ Rest of the lines must containt values for the corresponding headers
         values[:id] = value
       when /^estat$|^status$|^state$/i
         values[:state] = value
-      when /^text (.*)catal[à|a](.*)|^text_ca$/i
+      when /^text (.*)catal[à|a](.*)|^text_ca$|^answer\/ca$/i
         values[:answer][:ca] = value
-      when /^text (.*)castell[a|à](.*)|^text_es$/i
+      when /^text (.*)castell[a|à](.*)|^text_es$|^answer\/es$/i
         values[:answer][:es] = value
       when /^adreça$|^dirección$|^address$/i
         values[:address] = value

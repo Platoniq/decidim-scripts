@@ -19,18 +19,9 @@ namespace :proposals do
 
     desc 'Import answers to proposals from a CSV'
     task :answer, %i[admin csv] => :environment do |_task, args|
-      process_csv(args) do |admin, table|
-        table.each_with_index do |line, index|
-          print "##{index} (#{100 * (index + 1) / table.count}%): "
-          begin
-            processor = ProposalAnswerProcessor.new(admin, normalize(line))
-            processor.process!
-          rescue UnprocessableError => e
-            show_error(e.message)
-          rescue AlreadyProcessedError => e
-            show_warning(e.message)
-          end
-        end
+      process_csv(args) do |admin, line|
+        processor = ProposalAnswerProcessor.new(admin, normalize(line))
+        processor.process!
       end
     end
 
