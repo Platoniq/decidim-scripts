@@ -59,7 +59,6 @@ namespace :proposals do
           longitude: longitude
         )
         show_success("GEOLOCATED ad [#{latitude}, #{longitude}]!")
-        abort
       end
 
       def geolocate
