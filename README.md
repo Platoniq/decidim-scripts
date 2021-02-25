@@ -68,12 +68,13 @@ curl --upload-file proposal_answers.rake https://transfer.sh/script_helpers.rb -
 
 Which will return (for instance) the download addresses:
 
+```
 https://transfer.sh/23lG7/pam-ciutat.csv
 https://transfer.sh/YwYAN/pam-districte.csv
 https://transfer.sh/x3hUa/proposal_answers.rake
 https://transfer.sh/x4hUa/geoloc_import.rake
 https://transfer.sh/x5hUa/script_helpers.rake
-
+```
 
 2. Login into a shell session in heroku
 
