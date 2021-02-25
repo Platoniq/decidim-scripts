@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "csv"
+require 'csv'
 
 module ScriptHelpers
-  HELP_TEXT="
+  HELP_TEXT = "
 You need to specifiy an admin user (use the email) and a CSV to process:
 ie: rails \"proposals:batch:ACTION[admin@example.org,../some-file.csv]\"
 
 Not found proposals will be skipped"
 
-  CSV_TEXT="
+  CSV_TEXT = "
 CSV format must follow this specification:
 
 1st line is treated as header and must containt the fields: id, state, text_ca, text_es, text_.., address
@@ -17,31 +17,30 @@ Rest of the lines must containt values for the corresponding headers
 "
 
   def process_csv(args)
-    begin
-      raise ArgumentError if args.admin.blank?
-      raise ArgumentError if args.csv.blank?
-      admin = Decidim::User.find_by(admin: true, email: args.admin)
-      raise AdminError.new("#{args.admin} not found or not and admin") unless admin
+    raise ArgumentError if args.admin.blank?
+    raise ArgumentError if args.csv.blank?
 
-      table = CSV.parse(File.read(args.csv), headers: true)
+    admin = Decidim::User.find_by(admin: true, email: args.admin)
+    raise AdminError, "#{args.admin} not found or not and admin" unless admin
 
-      yield(admin, table)
-    rescue ArgumentError => e
-      puts
-      show_error(e.message)
-      show_help
-    rescue CSV::MalformedCSVError => e
-      puts
-      show_error(e.message)
-      show_csv_format
-    rescue AdminError => e
-      show_error(e.message)
-    end
+    table = CSV.parse(File.read(args.csv), headers: true)
+
+    yield(admin, table)
+  rescue ArgumentError => e
+    puts
+    show_error(e.message)
+    show_help
+  rescue CSV::MalformedCSVError => e
+    puts
+    show_error(e.message)
+    show_csv_format
+  rescue AdminError => e
+    show_error(e.message)
   end
 
   def proposal_from_id(id)
     proposal = Decidim::Proposals::Proposal.find_by(id: id)
-    raise UnprocessableError.new("Proposal [#{id}] not found!") unless proposal
+    raise UnprocessableError, "Proposal [#{id}] not found!" unless proposal
 
     proposal
   end
@@ -59,7 +58,7 @@ Rest of the lines must containt values for the corresponding headers
   end
 
   def normalize(line)
-    values = {answer: {}}
+    values = { answer: {} }
     line.each do |key, value|
       case key
       when /^id$/i
@@ -78,22 +77,22 @@ Rest of the lines must containt values for the corresponding headers
     values
   end
 
-  def raise_if_field_not_found(field, values) 
-    raise UnprocessableError.new("#{field.upcase} field not found for [#{values[:id]}]") unless values[field].present?
+  def raise_if_field_not_found(field, values)
+    raise UnprocessableError, "#{field.upcase} field not found for [#{values[:id]}]" unless values[field].present?
   end
 
   def normalize_state(state)
     case state
     when /^accepted|Acceptada|Aceptada$/i
-      "accepted"
+      'accepted'
     when /^rejected|Rebutjada|Rechazada$/i
-      "rejected"
+      'rejected'
     when /^evaluating|En avaluació|En evaluación$/i
-      "evaluating"
+      'evaluating'
     when /^withdrawn|retirat|retirada$/i
-      "withdrawn"
+      'withdrawn'
     else
-      raise UnprocessableError.new("State [#{state}] cannot be parsed")
+      raise UnprocessableError, "State [#{state}] cannot be parsed"
     end
   end
 

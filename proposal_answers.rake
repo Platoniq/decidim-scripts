@@ -11,17 +11,17 @@
 #   heroku run rake "proposals:batch:answer[admin@example.org,../pam-ciutat.csv]"
 #
 
-require_relative "script_helpers"
+require_relative 'script_helpers'
 
 namespace :proposals do
   namespace :batch do
     include ScriptHelpers
 
-    desc "Import answers to proposals from a CSV"
-    task :answer, [:admin,:csv] => :environment do |_task, args|
+    desc 'Import answers to proposals from a CSV'
+    task :answer, %i[admin csv] => :environment do |_task, args|
       process_csv(args) do |admin, table|
         table.each_with_index do |line, index|
-          print "##{index} (#{100*(index+1)/table.count}%): "
+          print "##{index} (#{100 * (index + 1) / table.count}%): "
           begin
             processor = ProposalAnswerProcessor.new(admin, normalize(line))
             processor.process!
@@ -42,21 +42,25 @@ namespace :proposals do
         @admin = admin
         @values = values
         @proposal = proposal_from_id(values[:id])
-        raise AlreadyProcessedError.new("Proposal [#{@proposal.id}] already answered at #{@proposal.answered_at} as [#{@proposal.internal_state}]!") if @proposal.answered_at.present?
-        raise UnprocessableError.new("Proposal [#{@proposal.id}] requires costs definition!") if @proposal.component.current_settings.answers_with_costs?
+        if @proposal.answered_at.present?
+          raise AlreadyProcessedError, "Proposal [#{@proposal.id}] already answered at #{@proposal.answered_at} as [#{@proposal.internal_state}]!"
+        end
+        if @proposal.component.current_settings.answers_with_costs?
+          raise UnprocessableError, "Proposal [#{@proposal.id}] requires costs definition!"
+        end
       end
 
       attr_reader :admin, :values, :proposal
 
       def process!
         print "Updating proposal #{proposal.id} with state [#{values[:state]}]"
-        form = OpenStruct.new(values.merge({current_user: admin, publish_answer?: proposal.component.current_settings.publish_answers_immediately?}))
+        form = OpenStruct.new(values.merge({ current_user: admin, publish_answer?: proposal.component.current_settings.publish_answers_immediately? }))
         Decidim::Proposals::Admin::AnswerProposal.call(form, proposal) do
           on(:ok) do
-            show_success("ANSWERED!")
+            show_success('ANSWERED!')
           end
           on(:invalid) do
-            show_error("NOT ANSWERED!")
+            show_error('NOT ANSWERED!')
           end
         end
       end
