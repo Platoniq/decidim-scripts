@@ -107,6 +107,12 @@ Rest of the lines must containt values for the corresponding headers
     end
   end
 
+  def parse_links(texts)
+    texts.map do |lang, text|
+      [lang, Decidim::ContentRenderers::LinkRenderer.new(text.strip).render.gsub("\n", "<br>")]
+    end.to_h
+  end
+
   def show_help
     puts HELP_TEXT
   end

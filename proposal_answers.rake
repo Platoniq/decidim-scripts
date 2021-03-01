@@ -30,6 +30,7 @@ namespace :proposals do
         raise_if_field_not_found(:state, values)
         raise_if_field_not_found(:answer, values)
         values[:state] = normalize_state(values[:state]) # throws UnprocessableError if fails
+        values[:answer] = parse_links(values[:answer])
         @admin = admin
         @values = values
         @proposal = proposal_from_id(values[:id])
