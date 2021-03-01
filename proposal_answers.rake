@@ -34,9 +34,9 @@ namespace :proposals do
         @admin = admin
         @values = values
         @proposal = proposal_from_id(values[:id])
-        if @proposal.answered_at.present?
-          raise AlreadyProcessedError, "Proposal [#{@proposal.id}] already answered at #{@proposal.answered_at} as [#{@proposal.internal_state}]!"
-        end
+        # if @proposal.answered_at.present?
+        #   raise AlreadyProcessedError, "Proposal [#{@proposal.id}] already answered at #{@proposal.answered_at} as [#{@proposal.internal_state}]!"
+        # end
         if @proposal.component.current_settings.answers_with_costs?
           raise UnprocessableError, "Proposal [#{@proposal.id}] requires costs definition!"
         end
