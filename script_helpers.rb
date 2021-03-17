@@ -69,7 +69,7 @@ Rest of the lines must containt values for the corresponding headers
   end
 
   def normalize(line)
-    values = { answer: {} }
+    values = { answer: {}, cost_report: {}, execution_period: {} }
     line.each do |key, value|
       case key
       when /^id$/i
@@ -82,10 +82,25 @@ Rest of the lines must containt values for the corresponding headers
         values[:answer][:es] = value
       when /^adreça$|^dirección$|^address$/i
         values[:address] = value
+      when /^cost$/i
+        values[:cost] = value
+      when /^informe de cost$/i
+        values[:cost_report][:ca] = value
+      when /^per[ií]ode d['’]execuci[oó]$/i
+        values[:execution_period][:ca] = value
       end
     end
     raise_if_field_not_found(:id, values)
     values
+  end
+
+  def emails_from(text)
+    text.scan(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i)
+  end
+
+  def url_for_proposal(proposal)
+    # "https://#{proposal.organization.host}/processes/#{proposal.participatory_space.slug}/f/#{proposal.component.id}/proposals/#{proposal.id}"
+    "https://www.decidim.barcelona/processes/#{proposal.participatory_space.slug}/f/#{proposal.component.id}/proposals/#{proposal.id}"
   end
 
   def raise_if_field_not_found(field, values)
