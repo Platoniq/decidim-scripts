@@ -60,7 +60,7 @@ Copy the script into your `lib/tasks` of your Decidim installation:
 
 ```
 cd lib/tasks
-wget -qO- https://github.com/Platoniq/decidim-scripts/archive/0.5.tar.gz | tar --transform 's/^decidim-scripts-0.5//' -xvz
+wget -qO- https://github.com/Platoniq/decidim-scripts/archive/0.7.tar.gz | tar --transform 's/^decidim-scripts-0.7//' -xvz
 ```
 
 Run in local (as testing):
@@ -130,7 +130,7 @@ wget https://transfer.sh/x3hUa/proposal-geolocs.csv
 4. Download the scripts into the `lib/tasks` folder:
 
 ```
-wget -qO- https://github.com/Platoniq/decidim-scripts/archive/0.5.tar.gz | tar --transform 's/^decidim-scripts-0.5//' -xvz -C lib/tasks
+wget -qO- https://github.com/Platoniq/decidim-scripts/archive/0.7.tar.gz | tar --transform 's/^decidim-scripts-0.7//' -xvz -C lib/tasks
 ```
 
 5. Run the script inside the shell session (2nd terminal):
