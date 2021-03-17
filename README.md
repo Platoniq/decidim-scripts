@@ -60,7 +60,7 @@ Copy the script into your `lib/tasks` of your Decidim installation:
 
 ```
 cd lib/tasks
-wget -qO- https://github.com/Platoniq/decidim-scripts/archive/0.4.tar.gz | tar --transform 's/^decidim-scripts-0.4//' -xvz
+wget -qO- https://github.com/Platoniq/decidim-scripts/archive/0.5.tar.gz | tar --transform 's/^decidim-scripts-0.5//' -xvz
 ```
 
 Run in local (as testing):
@@ -103,7 +103,7 @@ As there's no "copy" command to do that you can use the service https://transfer
 1. From your computer, send the files to transfer.sh:
 
 ```
-curl --upload-file proposal-answerss.csv https://transfer.sh/proposal-answers.csv -H "Max-Days: 1"
+curl --upload-file proposal-answers.csv https://transfer.sh/proposal-answers.csv -H "Max-Days: 1"
 curl --upload-file proposal-geolocs.csv https://transfer.sh/proposal-geolocs.csv -H "Max-Days: 1"
 ```
 
@@ -130,7 +130,7 @@ wget https://transfer.sh/x3hUa/proposal-geolocs.csv
 4. Download the scripts into the `lib/tasks` folder:
 
 ```
-wget -qO- https://github.com/Platoniq/decidim-scripts/archive/0.4.tar.gz | tar --transform 's/^decidim-scripts-0.4//' -xvz -C lib/tasks
+wget -qO- https://github.com/Platoniq/decidim-scripts/archive/0.5.tar.gz | tar --transform 's/^decidim-scripts-0.5//' -xvz -C lib/tasks
 ```
 
 5. Run the script inside the shell session (2nd terminal):
@@ -145,6 +145,7 @@ or:
 ```
 bin/rails proposals:batch:answer[admin@example.org,./proposal-answerss.csv]
 bin/rails proposals:batch:geoloc[admin@example.org,./proposal-geolocs.csv]
+bin/rails proposals:batch:cost[admin@example.org,./proposal-costs.csv]
 ```
 
 NOTE: in case the program runs out of  memory in Redis, just execute it again after a minute or so to allow for the queue to empty.
