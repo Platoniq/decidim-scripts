@@ -32,7 +32,7 @@ Rest of the lines must containt values for the corresponding headers
       rescue UnprocessableError => e
         show_error(e.message)
       rescue ActiveRecord::RecordInvalid => e
-        show_error(e.message)            
+        show_error(e.message)
       rescue AlreadyProcessedError => e
         show_warning(e.message)
       end
@@ -109,12 +109,12 @@ Rest of the lines must containt values for the corresponding headers
 
   def normalize_state(state)
     case state
+    when /^evaluating|En avaluació|En evaluación|Acceptada parcialment|Aceptada parcialmente$/i
+      'en_avaluacio'
     when /^accepted|Acceptada|Aceptada$/i
-      'accepted'
+      'acceptada'
     when /^rejected|Rebutjada|Rechazada$/i
-      'rejected'
-    when /^evaluating|En avaluació|En evaluación$/i
-      'evaluating'
+      'rebutjada'
     when /^withdrawn|retirat|retirada$/i
       'withdrawn'
     else
@@ -124,7 +124,7 @@ Rest of the lines must containt values for the corresponding headers
 
   def parse_links(texts)
     texts.map do |lang, text|
-      [lang, Decidim::ContentRenderers::LinkRenderer.new(text.strip).render.gsub("\n", "<br>")]
+      [lang, text.nil? ? nil : Decidim::ContentRenderers::LinkRenderer.new((text).strip).render.gsub("\n", "<br>")]
     end.to_h
   end
 
