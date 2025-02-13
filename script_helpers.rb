@@ -109,7 +109,7 @@ Rest of the lines must containt values for the corresponding headers
 
   def normalize_state(state)
     case state
-    when /^evaluating|En avaluació|En evaluación|Acceptada parcialment|Aceptada parcialmente|Acceptada, amb condicions|Aceptada, con condiciones$/i
+    when /^evaluating|En avaluació|En evaluación|Acceptada parcialment|Aceptada parcialmente|Acceptada, amb condicions|Aceptada, con condiciones|Acceptada amb condicions|Aceptada con condiciones$/i
       'en_avaluacio'
     when /^accepted|Acceptada|Aceptada$/i
       'acceptada'
