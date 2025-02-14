@@ -109,14 +109,16 @@ Rest of the lines must containt values for the corresponding headers
 
   def normalize_state(state)
     case state
-    when /^evaluating|En avaluació|En evaluación|Acceptada parcialment|Aceptada parcialmente$/i
+    when /^evaluating|en_avaluacio|En avaluació|En evaluación|Acceptada parcialment|Aceptada parcialmente|Acceptada, amb condicions|Aceptada, con condiciones|Acceptada amb condicions|Aceptada con condiciones$/i
       'en_avaluacio'
-    when /^accepted|Acceptada|Aceptada$/i
+    when /^accepted|acceptada|Acceptada|Aceptada$/i
       'acceptada'
-    when /^rejected|Rebutjada|Rechazada$/i
+    when /^rejected|rebutjada|Rebutjada|Rechazada$/i
       'rebutjada'
     when /^withdrawn|retirat|retirada$/i
       'withdrawn'
+    when /^planificada|Planificada$/i
+      'planificada'
     else
       raise UnprocessableError, "State [#{state}] cannot be parsed"
     end
